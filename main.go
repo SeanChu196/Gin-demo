@@ -113,8 +113,6 @@ func signinHanlder(c *gin.Context) {
 	if btn == "2" {
 		c.Redirect(http.StatusMovedPermanently, "signup")
 	} else {
-		sql.SqlOpen()
-		defer sql.SqlClose()
 		check_pwd := sql.SqlSelect(user.id, user.id)
 		if strings.Compare(strings.Trim(check_pwd, " "), user.password) == 0 {
 			//			client := LinkRedis()
@@ -144,10 +142,5 @@ func main() {
 	r.GET("/signin", signinInit)
 	r.POST("/signin", signinHanlder)
 	r.GET("/profile", profileInit)
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
 	r.Run("0.0.0.0:3000") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
