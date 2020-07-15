@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"./sql"
+	"Gin-demo/sql"
 
 	"github.com/gin-gonic/gin"
 )
@@ -92,8 +92,6 @@ func signupHandler(c *gin.Context) {
 				"text": " 密码不符合规范"})
 		}(c)
 	} else {
-		sql.SqlOpen()
-		defer sql.SqlClose()
 		if PhoneCheckRule(user.id) {
 			sql.SqlInsert(user.id, "", user.password)
 			c.Redirect(http.StatusMovedPermanently, "signin")
@@ -136,6 +134,8 @@ func signinHanlder(c *gin.Context) {
 }
 
 func main() {
+	sql.SqlOpen()
+	defer sql.SqlClose()
 	r := gin.Default()
 	gin.SetMode(gin.ReleaseMode)
 	r.LoadHTMLGlob("*.html")
